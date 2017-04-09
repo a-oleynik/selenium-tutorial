@@ -5,9 +5,6 @@ import org.testng.annotations.Test;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
-/**
- * Created by Andrew on 09.04.2017.
- */
 public class MyFirstTest extends BaseTest{
     @Test
     public void myFirstTest() {
