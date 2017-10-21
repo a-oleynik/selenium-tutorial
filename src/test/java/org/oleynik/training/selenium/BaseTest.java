@@ -24,7 +24,6 @@ public class BaseTest {
             wait = new WebDriverWait(driver, 10);
             return;
         }
-        DesiredCapabilities chromeCapabilities = DesiredCapabilities.chrome();
         ChromeOptions chromeOptions = new ChromeOptions();
         // Disable message about application testing mode
         chromeOptions.addArguments("disable-infobars");
@@ -33,8 +32,7 @@ public class BaseTest {
         prefs.put("credentials_enable_service", false);
         prefs.put("profile.password_manager_enabled", false);
         chromeOptions.setExperimentalOption("prefs", prefs);
-        chromeCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
-        driver = new ChromeDriver(chromeCapabilities);
+        driver = new ChromeDriver(chromeOptions);
 
         //DesiredCapabilities caps = new DesiredCapabilities();
         //caps.setCapability(FirefoxDriver.MARIONETTE, true);

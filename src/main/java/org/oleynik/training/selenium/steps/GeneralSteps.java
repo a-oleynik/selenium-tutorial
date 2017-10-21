@@ -15,6 +15,7 @@ import java.util.List;
 public class GeneralSteps {
     public static final String ADMIN_MENU_ITEM_XPATH_LOCATOR = "//ul[@id='box-apps-menu']/li";
     public static final String ADMIN_SUB_MENU_ITEM_CSS_LOCATOR = "ul#box-apps-menu li.selected ul.docs li";
+    public static final String EXTERNAL_LITE_CART_SITE = "http://litecart.stqa.ru/index.php/en/";
 
     public WebDriver driver;
 
@@ -40,5 +41,12 @@ public class GeneralSteps {
 
     public List<WebElement> getAdminSubMenuList(){
         return driver.findElements(By.cssSelector(ADMIN_SUB_MENU_ITEM_CSS_LOCATOR));
+    }
+
+    /**
+     * Navigate to http://litecart.stqa.ru/index.php/en/
+     */
+    public void openExternalLitecart(){
+        driver.get(EXTERNAL_LITE_CART_SITE);
     }
 }
