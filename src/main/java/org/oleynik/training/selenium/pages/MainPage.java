@@ -7,6 +7,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
+
 public class MainPage {
     private WebDriver driver;
 
@@ -69,7 +73,7 @@ public class MainPage {
         return getFirstCampaignItemRegularPriceElement().getCssValue(CSSValues.FONT_SIZE);
     }
 
-    public MainPage openMainPage(){
+    public MainPage openMainPage() {
         driver.get(LOCAL_MAIN_PAGE_URL);
         return this;
     }
@@ -78,7 +82,7 @@ public class MainPage {
         return driver.findElement(By.xpath(CREATE_NEW_CUSTOMER));
     }
 
-    public CreateAccountPage clickCreateNewCustomer(){
+    public CreateAccountPage clickCreateNewCustomer() {
         getCreateNewCustomerElement().click();
         (new WebDriverWait(driver, 10))
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[contains(.,'Create Account')]")));
@@ -99,5 +103,23 @@ public class MainPage {
 
     public WebElement getLoginElement() {
         return driver.findElement(By.name("login"));
+    }
+
+    public List<WebElement> getAllProducts() {
+        return driver.findElements(By.cssSelector("li.product"));
+    }
+
+    public WebElement getCartQuantityElement(){
+        return driver.findElement(By.xpath("//a/*[@class='quantity']"));
+    }
+
+    public WebElement getCheckoutElement() {
+        return driver.findElement(By.xpath("//a[contains(@href, '/checkout')]"));
+    }
+
+    public CheckoutPage openCheckout(){
+        getCheckoutElement().click();
+        new WebDriverWait(driver, 10).until(titleContains("Checkout"));
+        return new CheckoutPage(driver);
     }
 }

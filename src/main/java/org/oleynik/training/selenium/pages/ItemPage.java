@@ -4,6 +4,7 @@ import org.oleynik.training.selenium.utils.CSSValues;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 public class ItemPage {
 
@@ -15,6 +16,7 @@ public class ItemPage {
 
     public final static String CAMPAIGN_PRICE = "//strong[contains(@class,'campaign-price')]";
     public final static String REGULAR_PRICE = "//s[contains(@class,'regular-price')]";
+    public final static By OPTIONS_SIZE_BY = By.name("options[Size]");
 
 
     public String getItemTitle() {
@@ -59,5 +61,23 @@ public class ItemPage {
 
     public String getItemRegularPriceFontSize() {
         return getItemRegularPriceElement().getCssValue(CSSValues.FONT_SIZE);
+    }
+
+    public WebElement getAddToCartElement() {
+        return driver.findElement(By.name("add_cart_product"));
+    }
+
+    public WebElement getOptionSizeElement() {
+        return driver.findElement(OPTIONS_SIZE_BY);
+    }
+
+    public void selectFirstOptionSize(){
+        new Select(getOptionSizeElement()).selectByIndex(1);
+    }
+
+    public void selectFirstOptionsSizeIfExists(){
+        if(driver.findElements(OPTIONS_SIZE_BY).size() > 0){
+            selectFirstOptionSize();
+        }
     }
 }
