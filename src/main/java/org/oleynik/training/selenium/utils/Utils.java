@@ -2,6 +2,7 @@ package org.oleynik.training.selenium.utils;
 
 import org.oleynik.training.selenium.model.RGBA;
 
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,4 +26,7 @@ public class Utils {
         return Double.parseDouble(cssFontSize.replace("px", "").trim());
     }
 
+    public static String generateRandomEmail(){
+        return UUID.randomUUID() + "@my.test.com";
+    }
 }

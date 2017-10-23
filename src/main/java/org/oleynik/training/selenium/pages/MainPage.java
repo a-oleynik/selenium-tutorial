@@ -4,6 +4,8 @@ import org.oleynik.training.selenium.utils.CSSValues;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class MainPage {
     private WebDriver driver;
@@ -15,6 +17,8 @@ public class MainPage {
     public final static String FIRST_CAMPAIGN_ITEM_TITLE = "//*[@id='box-campaigns']//li/a[1]";
     public final static String CAMPAIGN_PRICE = "//strong[contains(@class,'campaign-price')]";
     public final static String REGULAR_PRICE = "//s[contains(@class,'regular-price')]";
+    public final static String LOCAL_MAIN_PAGE_URL = "http://localhost:8080/litecard/en/";
+    public final static String CREATE_NEW_CUSTOMER = "//form[@name='login_form']//a";
 
 
     public WebElement getFirstCampaignItemElement() {
@@ -65,4 +69,35 @@ public class MainPage {
         return getFirstCampaignItemRegularPriceElement().getCssValue(CSSValues.FONT_SIZE);
     }
 
+    public MainPage openMainPage(){
+        driver.get(LOCAL_MAIN_PAGE_URL);
+        return this;
+    }
+
+    public WebElement getCreateNewCustomerElement() {
+        return driver.findElement(By.xpath(CREATE_NEW_CUSTOMER));
+    }
+
+    public CreateAccountPage clickCreateNewCustomer(){
+        getCreateNewCustomerElement().click();
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[contains(.,'Create Account')]")));
+        return new CreateAccountPage(driver);
+    }
+
+    public WebElement getLogoutElement() {
+        return driver.findElement(By.xpath("id('navigation')//li/a[.='Logout']"));
+    }
+
+    public WebElement getEmailElement() {
+        return driver.findElement(By.name("email"));
+    }
+
+    public WebElement getPasswordElement() {
+        return driver.findElement(By.name("password"));
+    }
+
+    public WebElement getLoginElement() {
+        return driver.findElement(By.name("login"));
+    }
 }
