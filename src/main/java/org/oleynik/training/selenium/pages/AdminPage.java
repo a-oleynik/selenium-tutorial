@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.List;
+
 public class AdminPage {
     private WebDriver driver;
 
@@ -65,7 +67,7 @@ public class AdminPage {
         return driver.findElement(By.name("manufacturer_id"));
     }
 
-    public void selectManufacturerByValue(String value){
+    public void selectManufacturerByValue(String value) {
         Select manufacturerSelect = new Select(getManufacturerElement());
         manufacturerSelect.selectByValue(value);
     }
@@ -94,15 +96,27 @@ public class AdminPage {
         return driver.findElement(By.cssSelector("[name='purchase_price']"));
     }
 
-    public WebElement getPurchasePriceCurrencyCodeElement(){
+    public WebElement getPurchasePriceCurrencyCodeElement() {
         return driver.findElement(By.cssSelector("[name='purchase_price_currency_code']"));
     }
 
-    public void selectPurchasePriceCurrencyCode(String currencyCode){
+    public void selectPurchasePriceCurrencyCode(String currencyCode) {
         new Select(getPurchasePriceCurrencyCodeElement()).selectByValue(currencyCode);
     }
 
-    public WebElement getSaveNewItemElement(){
+    public WebElement getSaveNewItemElement() {
         return driver.findElement(By.cssSelector("[name='save']"));
+    }
+
+    public WebElement getCountriesElement() {
+        return driver.findElement(By.xpath("//li/a/*[.='Countries']"));
+    }
+
+    public WebElement getNewCountryElement() {
+        return driver.findElement(By.xpath("//a[contains(@href, 'doc=edit_country')]"));
+    }
+
+    public List<WebElement> getAllCountryPopupFields() {
+        return driver.findElements(By.cssSelector("#content [target='_blank']"));
     }
 }

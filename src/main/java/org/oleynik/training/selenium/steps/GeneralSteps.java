@@ -1,6 +1,7 @@
 package org.oleynik.training.selenium.steps;
 
 import org.oleynik.training.selenium.pages.*;
+import org.oleynik.training.selenium.utils.WebdriverUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,7 +9,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
+import java.util.Set;
 
+import static java.lang.String.format;
 import static org.openqa.selenium.support.ui.ExpectedConditions.numberOfElementsToBe;
 
 
@@ -24,20 +27,22 @@ public class GeneralSteps {
     private MainPage mainPage;
     private ItemPage itemPage;
     private CheckoutPage checkoutPage;
+    private AdminPage adminPage;
     private WebDriverWait wait;
 
-    public GeneralSteps(WebDriver driver){
+    public GeneralSteps(WebDriver driver) {
         this.driver = driver;
         mainPage = new MainPage(driver);
         itemPage = new ItemPage(driver);
         checkoutPage = new CheckoutPage(driver);
+        adminPage = new AdminPage(driver);
         wait = (new WebDriverWait(driver, 10));
     }
 
     /**
      * Login into admin console.
      */
-    public AdminPage adminLogin(){
+    public AdminPage adminLogin() {
         AdminLoginPage adminLoginPage = new AdminLoginPage(driver);
         adminLoginPage.open();
         adminLoginPage.getUsernameElement().sendKeys("admin");
@@ -47,36 +52,58 @@ public class GeneralSteps {
         return new AdminPage(driver);
     }
 
-    public List<WebElement> getAdminMenuList(){
+    public List<WebElement> getAdminMenuList() {
         return driver.findElements(By.xpath(ADMIN_MENU_ITEM_XPATH_LOCATOR));
     }
 
-    public List<WebElement> getAdminSubMenuList(){
+    public List<WebElement> getAdminSubMenuList() {
         return driver.findElements(By.cssSelector(ADMIN_SUB_MENU_ITEM_CSS_LOCATOR));
     }
 
     /**
      * Navigate to http://litecart.stqa.ru/index.php/en/
      */
-    public void openExternalLitecart(){
+    public void openExternalLitecart() {
         driver.get(EXTERNAL_LITE_CART_SITE);
     }
 
     /**
      * Navigate to local litecart
      */
-    public void openLocalLitecart(){
+    public void openLocalLitecart() {
         mainPage.openMainPage();
     }
 
-    public void openCountries(){
-        driver.findElement(By.xpath("//li/a/*[.='Countries']")).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[contains(.,'Countries')]")));
+    public void waitPageTitle(String title) {
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(format("//h1[contains(.,\"%s\")]", title))));
     }
 
-    public void openGeoZones(){
+    public void openCountries() {
+        adminPage.getCountriesElement().click();
+        waitPageTitle("Countries");
+    }
+
+    public void openAddNewCountryDialogue() {
+        adminPage.getNewCountryElement().click();
+        waitPageTitle("Add New Country");
+    }
+
+    public void openAndClosePopupsFromNewCountryDialogue() {
+        List<WebElement> popupLinks = adminPage.getAllCountryPopupFields();
+        String countryEditWindow = driver.getWindowHandle();
+        Set<String> openWindows = driver.getWindowHandles();
+        popupLinks.forEach(link -> {
+            link.click();
+            String newWindow = wait.until(WebdriverUtils.anyWindowOtherThan(openWindows));
+            driver.switchTo().window(newWindow);
+            driver.close();
+            driver.switchTo().window(countryEditWindow);
+        });
+    }
+
+    public void openGeoZones() {
         driver.findElement(By.xpath("//li/a/*[.='Geo Zones']")).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[contains(.,'Geo Zones')]")));
+        waitPageTitle("Geo Zones");
     }
 
     public void addFirstItemToCart() {
