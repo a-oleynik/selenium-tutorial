@@ -1,7 +1,6 @@
 package org.oleynik.training.selenium.steps;
 
-import org.oleynik.training.selenium.pages.AdminLoginPage;
-import org.oleynik.training.selenium.pages.AdminPage;
+import org.oleynik.training.selenium.pages.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,6 +8,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
+
+import static org.openqa.selenium.support.ui.ExpectedConditions.numberOfElementsToBe;
 
 
 /**
@@ -20,9 +21,17 @@ public class GeneralSteps {
     public static final String EXTERNAL_LITE_CART_SITE = "http://litecart.stqa.ru/index.php/en/";
 
     public WebDriver driver;
+    private MainPage mainPage;
+    private ItemPage itemPage;
+    private CheckoutPage checkoutPage;
+    private WebDriverWait wait;
 
     public GeneralSteps(WebDriver driver){
         this.driver = driver;
+        mainPage = new MainPage(driver);
+        itemPage = new ItemPage(driver);
+        checkoutPage = new CheckoutPage(driver);
+        wait = (new WebDriverWait(driver, 10));
     }
 
     /**
@@ -34,8 +43,7 @@ public class GeneralSteps {
         adminLoginPage.getUsernameElement().sendKeys("admin");
         adminLoginPage.getPasswordElement().sendKeys("admin");
         adminLoginPage.getLoginElement().click();
-        (new WebDriverWait(driver, 10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.id("box-apps-menu")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("box-apps-menu")));
         return new AdminPage(driver);
     }
 
@@ -54,15 +62,44 @@ public class GeneralSteps {
         driver.get(EXTERNAL_LITE_CART_SITE);
     }
 
+    /**
+     * Navigate to local litecart
+     */
+    public void openLocalLitecart(){
+        mainPage.openMainPage();
+    }
+
     public void openCountries(){
         driver.findElement(By.xpath("//li/a/*[.='Countries']")).click();
-        (new WebDriverWait(driver, 10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[contains(.,'Countries')]")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[contains(.,'Countries')]")));
     }
 
     public void openGeoZones(){
         driver.findElement(By.xpath("//li/a/*[.='Geo Zones']")).click();
-        (new WebDriverWait(driver, 10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[contains(.,'Geo Zones')]")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[contains(.,'Geo Zones')]")));
+    }
+
+    public void addFirstItemToCart() {
+        //Open the application
+        openLocalLitecart();
+        //Open the first product
+        mainPage.getAllProducts().get(0).click();
+        //Add the item to cart (choose optional size if exists)
+        itemPage.selectFirstOptionsSizeIfExists();
+        itemPage.getAddToCartElement().click();
+    }
+
+    public CheckoutPage openCheckoutPage() {
+        //Open the cart by Checkout link
+        return mainPage.openCheckout();
+    }
+
+    public void removeItemsFromCart(int numberOfItems) {
+        //Remove all chosen items from the cart
+        while (checkoutPage.getRemoveElements().size() > 0) {
+            checkoutPage.removeVisibleItem();
+            --numberOfItems;
+            wait.until(numberOfElementsToBe(CheckoutPage.CART_ITEM_BY, numberOfItems));
+        }
     }
 }

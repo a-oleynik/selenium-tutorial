@@ -1,4 +1,4 @@
-package org.oleynik.training.selenium.litecard.test;
+package org.oleynik.training.selenium.litecart.test;
 
 import org.oleynik.training.selenium.BaseTest;
 import org.oleynik.training.selenium.model.Item;
