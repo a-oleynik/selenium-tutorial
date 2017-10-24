@@ -13,6 +13,7 @@ import java.util.Set;
 
 import static java.lang.String.format;
 import static org.openqa.selenium.support.ui.ExpectedConditions.numberOfElementsToBe;
+import static org.openqa.selenium.support.ui.ExpectedConditions.textToBePresentInElement;
 
 
 /**
@@ -114,6 +115,14 @@ public class GeneralSteps {
         //Add the item to cart (choose optional size if exists)
         itemPage.selectFirstOptionsSizeIfExists();
         itemPage.getAddToCartElement().click();
+    }
+
+    public void addFewFirstItemsToCart(int numberOfItems) {
+        for (int i = 1; i <= numberOfItems; i++) {
+            addFirstItemToCart();
+            //Wait for the cart counter
+            wait.until(textToBePresentInElement(mainPage.getCartQuantityElement(), String.valueOf(i)));
+        }
     }
 
     public CheckoutPage openCheckoutPage() {
