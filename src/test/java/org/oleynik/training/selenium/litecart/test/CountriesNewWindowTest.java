@@ -5,6 +5,9 @@ import org.oleynik.training.selenium.steps.GeneralSteps;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+/**
+ * Task 14.
+ */
 public class CountriesNewWindowTest extends BaseTest {
     private static GeneralSteps generalSteps;
 

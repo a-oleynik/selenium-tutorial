@@ -18,6 +18,10 @@ public class AdminPage {
         return driver.findElement(By.xpath("id('box-apps-menu')//li/a/span[.='Catalog']"));
     }
 
+    public WebElement getFirstItemCategoryFromCatalogElement() {
+        return driver.findElement(By.xpath("//a[contains(@href,'doc=catalog&category_id=1')]"));
+    }
+
     public WebElement getAddNewProductElement() {
         return driver.findElement(By.xpath("id('content')//a[contains(., 'Add New Product')]"));
     }
@@ -118,5 +122,9 @@ public class AdminPage {
 
     public List<WebElement> getAllCountryPopupFields() {
         return driver.findElements(By.cssSelector("#content [target='_blank']"));
+    }
+
+    public List<WebElement> getAllItemsFromCatalog() {
+        return driver.findElements(By.xpath("//td[3]/a[contains(@href, 'doc=edit_product')]"));
     }
 }
