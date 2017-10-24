@@ -19,7 +19,7 @@ public class LogEntryTest extends BaseTest {
     }
 
     @Test
-    public void countriesOpenNewWindow() {
+    public void checkWebdriverLogEntryDuringItemAdminPageOpening() {
         AdminPage adminPage = generalSteps.adminLogin();
         adminPage.getCatalogElement().click();
         adminPage.getFirstItemCategoryFromCatalogElement().click();
